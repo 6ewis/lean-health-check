@@ -1,0 +1,75 @@
+{
+  "name": "@altruist/lean-health-check",
+  "version": "1.0.0",
+  "description": "Lean health Check",
+  "main": "./lib/health-check.js",
+  "engines": {
+    "node": ">=6",
+    "npm": ">=4"
+  },
+  "dependencies": {
+    "lodash": "^4.17.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "10.0.1",
+    "dotenv-override": "^5.0.1",
+    "eslint": "5.15.1",
+    "eslint-config-last": "0.0.5",
+    "eslint-config-prettier": "4.1.0",
+    "eslint-config-strongloop": "^2.1.0",
+    "eslint-plugin-prettier": "3.0.1",
+    "eslint-plugin-react": "7.12.4",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.5",
+    "nodemon": "^1.18.10",
+    "prettier": "1.16.4",
+    "mocha": "^3.2.0",
+    "mockery": "^2.0.0",
+    "npm-prepublish": "^1.2.2",
+    "nyc": "^10.0.0",
+    "proclaim": "^3.4.4",
+    "sinon": "^1.17.6",
+    "sinon-as-promised": "^4.0.2"
+  },
+  "nyc": {
+    "exclude": [
+      "coverage",
+      "example",
+      "test"
+    ]
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "make verify test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/6ewis/lean-health-check.git"
+  },
+  "keywords": [
+    "health",
+    "health",
+    "check"
+  ],
+  "author": "Lewis Dackam",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/6ewis/lean-health-check/issues"
+  },
+  "homepage": "https://github.com/6ewis/lean-health-check#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "post-commit": "git update-index --again"
+    }
+  },
+  "lint-staged": {
+    "*.{js}": [
+      "prettier --write",
+      "eslint --fix --max-warnings 0",
+      "git add"
+    ]
+  }
+}
