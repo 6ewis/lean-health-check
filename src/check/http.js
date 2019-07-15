@@ -4,16 +4,14 @@
 
 'use strict';
 
-const Base = require('./base');
-const isFunction = require('lodash/isFunction');
-const isPlainObject = require('lodash/isPlainObject');
-const isString = require('lodash/isString');
-const superagent = require('superagent');
+import Base from './base';
+import is from 'ramda/src/is';
+import superagent from 'superagent';
 
 /**
  * Class representing a single health check that pings a URL.
  */
-module.exports = class PingUrlCheck extends Base {
+module.exports = class HTTPUrlCheck extends Base {
   /**
    * Create a ping URL health check. Accepts the same options as Base, but with a few additions.
    * @param {Object} options - The health check options.
@@ -22,7 +20,7 @@ module.exports = class PingUrlCheck extends Base {
    * @throws {TypeError} Will throw if any options are invalid.
    */
   constructor(options) {
-    PingUrlCheck.assertOptionValidity(options);
+    HTTPUrlCheck.assertOptionValidity(options);
     super(options);
   }
 
@@ -43,9 +41,7 @@ module.exports = class PingUrlCheck extends Base {
       .retry(this.options.retry || 2)
       .then(() => {
         this.ok = true;
-        this.options.ok = "testing  if working";
-
-        this.checkOutput = 'test';
+        this.checkOutput = 'success';
         this.lastUpdated = new Date();
         this.log.info(`Health check "${this.options.name}" succeeded`);
       })
@@ -56,7 +52,6 @@ module.exports = class PingUrlCheck extends Base {
         this.log.error(`Health check "${this.options.name}" failed: ${error.message}`);
       });
 
-    console.log('how does this look like http', this.ok);
     return response;
   }
 
@@ -66,13 +61,13 @@ module.exports = class PingUrlCheck extends Base {
    * @returns {(Boolean|TypeError)} Will return `true` if the options are valid, or a descriptive error if not.
    */
   static validateOptions(options) {
-    if (!isPlainObject(options)) {
+    if (!is(Object, options)) {
       return new TypeError('Options must be an object');
     }
-    if (!isFunction(options.url) && (!isString(options.url) || !options.url.trim())) {
+    if (!is(Function, options.url) && (!is(String, options.url) || !options.url.trim())) {
       return new TypeError('Invalid option: url must be a non-empty string or a function');
     }
-    if (options.headers !== undefined && !isPlainObject(options.headers)) {
+    if (options.headers !== undefined && !is(Object, options.headers)) {
       return new TypeError('Invalid option: headers must be an object');
     }
     return true;
@@ -84,7 +79,7 @@ module.exports = class PingUrlCheck extends Base {
    * @throws {TypeError} Will throw if the options are invalid.
    */
   static assertOptionValidity(options) {
-    const validationResult = PingUrlCheck.validateOptions(options);
+    const validationResult = HTTPUrlCheck.validateOptions(options);
     if (validationResult instanceof Error) {
       throw validationResult;
     }

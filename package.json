@@ -67,6 +67,7 @@
     ]
   },
   "dependencies": {
+    "ramda": "^0.26.1",
     "superagent": "^5.1.0"
   }
 }

@@ -4,8 +4,8 @@
  */
 'use strict';
 
-const Base = require('./check/base');
-const defaults = require('lodash/defaults');
+import Base from './check/base';
+import mergeDeepLeft from 'ramda/src/mergeDeepLeft';
 
 /**
  * Class representing a set of health checks.
@@ -19,7 +19,7 @@ module.exports = class HealthCheck {
    * @throws {TypeError} Will throw if any options are invalid.
    */
   constructor(options) {
-    this.options = defaults({}, options, HealthCheck.defaultOptions);
+    this.options = mergeDeepLeft({}, options, HealthCheck.defaultOptions);
   }
 
   async runAllHealthCheck() {
@@ -51,7 +51,6 @@ module.exports = class HealthCheck {
       //false will be the resolved value if any of the health checks with severity 1 are failing.
       .filter((check) => check.severity === 1)
       .every((check) => check.ok);
-    console.log("check", ok);
     return Promise.resolve(ok);
   }
 

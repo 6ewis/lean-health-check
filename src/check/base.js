@@ -3,10 +3,8 @@
  */
 'use strict';
 
-const defaults = require('lodash/defaults');
-const isFinite = require('lodash/isFinite');
-const isPlainObject = require('lodash/isPlainObject');
-const isString = require('lodash/isString');
+import is from 'ramda/src/is';
+import mergeDeepLeft from 'ramda/src/mergeDeepLeft';
 
 /**
  * Class representing a single health check.
@@ -27,7 +25,7 @@ module.exports = class Check {
    * @throws {TypeError} Will throw if any options are invalid.
    */
   constructor(options) {
-    this.options = defaults({}, options, Check.defaultOptions);
+    this.options = mergeDeepLeft({}, options, Check.defaultOptions);
     Check.assertOptionValidity(this.options);
     this.log = this.options.log;
 
@@ -144,7 +142,7 @@ module.exports = class Check {
    * @returns {(Boolean|TypeError)} Will return `true` if the options are valid, or a descriptive error if not.
    */
   static validateOptions(options) {
-    if (!isPlainObject(options)) {
+    if (!is(Object, options)) {
       return new TypeError('Options must be an object');
     }
     for (const option of module.exports.requiredOptions) {
@@ -152,22 +150,22 @@ module.exports = class Check {
         return new TypeError(`Missing required option: ${option}`);
       }
     }
-    if (!isString(options.businessImpact) || !options.businessImpact.trim()) {
+    if (!is(String, options.businessImpact) || !options.businessImpact.trim()) {
       return new TypeError('Invalid option: businessImpact must be a non-empty string');
     }
-    if (!isString(options.id) || !/^[a-z0-9\-]+$/.test(options.id)) {
+    if (!is(String, options.id) || !/^[a-z0-9-]+$/.test(options.id)) {
       return new TypeError('Invalid option: id must be lowercase and alphanumeric with hyphens');
     }
-    if (!isString(options.name) || !options.name.trim()) {
+    if (!is(String, options.name) || !options.name.trim()) {
       return new TypeError('Invalid option: name must be a non-empty string');
     }
-    if (!isString(options.panicGuide) || !options.panicGuide.trim()) {
+    if (!is(String, options.panicGuide) || !options.panicGuide.trim()) {
       return new TypeError('Invalid option: panicGuide must be a non-empty string');
     }
     if (!isFinite(options.severity) || options.severity < 1 || options.severity > 3) {
       return new TypeError('Invalid option: severity must be 1, 2, or 3');
     }
-    if (!isString(options.technicalSummary) || !options.technicalSummary.trim()) {
+    if (!is(String, options.technicalSummary) || !options.technicalSummary.trim()) {
       return new TypeError('Invalid option: technicalSummary must be a non-empty string');
     }
     return true;
