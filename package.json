@@ -1,12 +1,12 @@
 {
   "name": "lean-health-check",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Lean health Check",
   "main": "dist/index.js",
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.4",
-    "@babel/node": "^7.2.2",
+    "@babel/node": "^7.5.0",
     "@babel/preset-env": "^7.3.1",
     "babel-eslint": "10.0.1",
     "dotenv-override": "^5.0.1",
@@ -18,22 +18,9 @@
     "eslint-plugin-react": "7.12.4",
     "husky": "^1.3.1",
     "lint-staged": "^8.1.5",
-    "mocha": "^3.2.0",
-    "mockery": "^2.0.0",
     "nodemon": "^1.18.10",
     "npm-prepublish": "^1.2.2",
-    "nyc": "^10.0.0",
-    "prettier": "1.16.4",
-    "proclaim": "^3.4.4",
-    "sinon": "^1.17.6",
-    "sinon-as-promised": "^4.0.2"
-  },
-  "nyc": {
-    "exclude": [
-      "coverage",
-      "example",
-      "test"
-    ]
+    "prettier": "1.16.4"
   },
   "scripts": {
     "build": "babel ./src --out-dir ./dist --source-maps --copy-files",

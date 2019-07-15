@@ -2,7 +2,7 @@ Http Health Check
 =================
 
 Lean fork of FT health check standard. 
-
+  - Declarative initialization.
   - Added HTTP health check without any form of caching from HTTP1.0/HTTP2.0
   - Added #retry, the ability to check an endpoint as many times as wanted on failures
   - Removed default intervals health checking
@@ -34,7 +34,7 @@ Usage
 Running the Health Check module requires [Node.js] 6.x and [npm]. You can install with:
 
 ```sh
-npm install @altruist/health-check
+yarn add lean-health-check
 ```
 
 ### API Documentation
@@ -42,7 +42,7 @@ npm install @altruist/health-check
 This library makes use of [promises] – familiarity is assumed in the rest of the API documentation. You'll also need to require the module with:
 
 ```js
-const HealthCheck = require('@altruist/health-check');
+import HealthCheck from 'lean-health-check';
 ```
 
 ### `new HealthCheck( [options] )`
