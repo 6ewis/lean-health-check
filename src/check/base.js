@@ -9,7 +9,7 @@ import mergeDeepLeft from 'ramda/src/mergeDeepLeft';
 /**
  * Class representing a single health check.
  */
-module.exports = class Check {
+export default class Check {
   /**
    * Create a health check. The options used here are documented in the Health check standard:
    * @param {Object} options - The health check options.
@@ -182,13 +182,13 @@ module.exports = class Check {
       throw validationResult;
     }
   }
-};
+}
 
 /**
  * Check option defaults. This will be merged with user options.
  * @access private
  */
-module.exports.defaultOptions = {
+Check.defaultOptions = {
   interval: 30000,
   log: console,
   severity: 1,
@@ -198,7 +198,7 @@ module.exports.defaultOptions = {
  * A list of options that are required.
  * @access private
  */
-module.exports.requiredOptions = new Set([
+Check.requiredOptions = new Set([
   'businessImpact',
   'id',
   'interval',
