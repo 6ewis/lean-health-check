@@ -43,13 +43,13 @@ module.exports = class HTTPUrlCheck extends Base {
         this.ok = true;
         this.checkOutput = 'success';
         this.lastUpdated = new Date();
-        this.log.info(`Health check "${this.options.name}" succeeded`);
+        console.info(`Health check "${this.options.name}" succeeded`);
       })
       .catch((error) => {
         this.ok = false;
         this.checkOutput = error.message;
         this.lastUpdated = new Date();
-        this.log.error(`Health check "${this.options.name}" failed: ${error.message}`);
+        console.error(`Health check "${this.options.name}" failed: ${error.message}`);
       });
 
     return response;

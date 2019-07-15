@@ -4,14 +4,15 @@
  */
 'use strict';
 
-const Base = require('./check/base');
+var _base = _interopRequireDefault(require("./check/base"));
 
-const defaults = require('lodash/defaults');
+var _mergeDeepLeft = _interopRequireDefault(require("ramda/src/mergeDeepLeft"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * Class representing a set of health checks.
  */
-
-
 module.exports = class HealthCheck {
   /**
    * Create a health check set.
@@ -21,7 +22,7 @@ module.exports = class HealthCheck {
    * @throws {TypeError} Will throw if any options are invalid.
    */
   constructor(options) {
-    this.options = defaults({}, options, HealthCheck.defaultOptions);
+    this.options = (0, _mergeDeepLeft.default)({}, options, HealthCheck.defaultOptions);
   }
 
   async runAllHealthCheck() {
@@ -49,7 +50,6 @@ module.exports = class HealthCheck {
     await this.runAllHealthCheck();
     const ok = this.toJSON() //false will be the resolved value if any of the health checks with severity 1 are failing.
     .filter(check => check.severity === 1).every(check => check.ok);
-    console.log("check", ok);
     return Promise.resolve(ok);
   }
   /**
@@ -115,5 +115,5 @@ module.exports.checkTypeMap = {
  * @access public
  */
 
-module.exports.Check = Base;
+module.exports.Check = _base.default;
 //# sourceMappingURL=index.js.map

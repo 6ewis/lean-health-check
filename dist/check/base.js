@@ -3,18 +3,15 @@
  */
 'use strict';
 
-const defaults = require('lodash/defaults');
+var _is = _interopRequireDefault(require("ramda/src/is"));
 
-const isFinite = require('lodash/isFinite');
+var _mergeDeepLeft = _interopRequireDefault(require("ramda/src/mergeDeepLeft"));
 
-const isPlainObject = require('lodash/isPlainObject');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const isString = require('lodash/isString');
 /**
  * Class representing a single health check.
  */
-
-
 module.exports = class Check {
   /**
    * Create a health check. The options used here are documented in the Health check standard:
@@ -31,7 +28,7 @@ module.exports = class Check {
    * @throws {TypeError} Will throw if any options are invalid.
    */
   constructor(options) {
-    this.options = defaults({}, options, Check.defaultOptions);
+    this.options = (0, _mergeDeepLeft.default)({}, options, Check.defaultOptions);
     Check.assertOptionValidity(this.options);
     this.log = this.options.log; // Save output options to properties
 
@@ -153,7 +150,7 @@ module.exports = class Check {
 
 
   static validateOptions(options) {
-    if (!isPlainObject(options)) {
+    if (!(0, _is.default)(Object, options)) {
       return new TypeError('Options must be an object');
     }
 
@@ -163,19 +160,19 @@ module.exports = class Check {
       }
     }
 
-    if (!isString(options.businessImpact) || !options.businessImpact.trim()) {
+    if (!(0, _is.default)(String, options.businessImpact) || !options.businessImpact.trim()) {
       return new TypeError('Invalid option: businessImpact must be a non-empty string');
     }
 
-    if (!isString(options.id) || !/^[a-z0-9\-]+$/.test(options.id)) {
+    if (!(0, _is.default)(String, options.id) || !/^[a-z0-9-]+$/.test(options.id)) {
       return new TypeError('Invalid option: id must be lowercase and alphanumeric with hyphens');
     }
 
-    if (!isString(options.name) || !options.name.trim()) {
+    if (!(0, _is.default)(String, options.name) || !options.name.trim()) {
       return new TypeError('Invalid option: name must be a non-empty string');
     }
 
-    if (!isString(options.panicGuide) || !options.panicGuide.trim()) {
+    if (!(0, _is.default)(String, options.panicGuide) || !options.panicGuide.trim()) {
       return new TypeError('Invalid option: panicGuide must be a non-empty string');
     }
 
@@ -183,7 +180,7 @@ module.exports = class Check {
       return new TypeError('Invalid option: severity must be 1, 2, or 3');
     }
 
-    if (!isString(options.technicalSummary) || !options.technicalSummary.trim()) {
+    if (!(0, _is.default)(String, options.technicalSummary) || !options.technicalSummary.trim()) {
       return new TypeError('Invalid option: technicalSummary must be a non-empty string');
     }
 
