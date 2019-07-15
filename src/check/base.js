@@ -44,22 +44,21 @@ module.exports = class Check {
     this.checkOutput = '';
     this.ok = true;
     this.lastUpdated = new Date();
-
-    // Start running the healthcheck
-    this.start();
   }
 
   /**
    * Start running the health check.
    * @throws {Error} Will throw if the health check is already running.
    */
-  start() {
+  async start() {
     if (this.isRunning()) {
       throw new Error('The check has already been started');
     }
-    this.run();
-    this._interval = setInterval(this.run.bind(this), this.options.interval);
-    this._interval.unref();
+    await this.run();
+    if (this.options.interval) {
+      this._interval = setInterval(this.run.bind(this), this.options.interval);
+      this._interval.unref();
+    }
   }
 
   /**
@@ -70,8 +69,11 @@ module.exports = class Check {
     if (!this.isRunning()) {
       throw new Error('The check has not been started');
     }
-    clearInterval(this._interval);
-    delete this._interval;
+
+    if (this.options.interval) {
+      clearInterval(this._interval);
+      delete this._interval;
+    }
   }
 
   /**
@@ -79,7 +81,11 @@ module.exports = class Check {
    * @returns {Boolean} Returns whether the check is running.
    */
   isRunning() {
-    return Boolean(this._interval);
+    if (!this.options.interval) {
+      return Boolean(this._interval);
+    }
+
+    throw new Error('The interval option is missing therefore nothing is currently running');
   }
 
   /**
@@ -88,6 +94,18 @@ module.exports = class Check {
    */
   run() {
     throw new Error('The Check class must be extended rather than used directly');
+  }
+
+  /**
+   * Get a status
+   * @returns {Function} A function which returns a promise that resolves to a boolean indicating whether all the health checks are OK.
+   */
+  status() {
+    const ok = this.toJSON()
+      //false will be the resolved value if any of the health checks with severity 1 are failing.
+      .filter((check) => check.severity === 1)
+      .every((check) => check.ok);
+    return Promise.resolve(ok);
   }
 
   /**

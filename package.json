@@ -1,16 +1,13 @@
 {
-  "name": "@altruist/lean-health-check",
-  "version": "1.0.0",
+  "name": "lean-health-check",
+  "version": "1.0.1",
   "description": "Lean health Check",
-  "main": "./lib/health-check.js",
-  "engines": {
-    "node": ">=6",
-    "npm": ">=4"
-  },
-  "dependencies": {
-    "lodash": "^4.17.2"
-  },
+  "main": "dist/index.js",
   "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
     "babel-eslint": "10.0.1",
     "dotenv-override": "^5.0.1",
     "eslint": "5.15.1",
@@ -21,12 +18,12 @@
     "eslint-plugin-react": "7.12.4",
     "husky": "^1.3.1",
     "lint-staged": "^8.1.5",
-    "nodemon": "^1.18.10",
-    "prettier": "1.16.4",
     "mocha": "^3.2.0",
     "mockery": "^2.0.0",
+    "nodemon": "^1.18.10",
     "npm-prepublish": "^1.2.2",
     "nyc": "^10.0.0",
+    "prettier": "1.16.4",
     "proclaim": "^3.4.4",
     "sinon": "^1.17.6",
     "sinon-as-promised": "^4.0.2"
@@ -38,10 +35,8 @@
       "test"
     ]
   },
-  "directories": {
-    "lib": "lib"
-  },
   "scripts": {
+    "build": "babel ./src --out-dir ./dist --source-maps --copy-files",
     "test": "make verify test"
   },
   "repository": {
@@ -49,7 +44,6 @@
     "url": "git+https://github.com/6ewis/lean-health-check.git"
   },
   "keywords": [
-    "health",
     "health",
     "check"
   ],
@@ -71,5 +65,8 @@
       "eslint --fix --max-warnings 0",
       "git add"
     ]
+  },
+  "dependencies": {
+    "superagent": "^5.1.0"
   }
 }

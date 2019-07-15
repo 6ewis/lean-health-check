@@ -4,7 +4,7 @@
  */
 'use strict';
 
-const Check = require('./check');
+const Base = require('./check/base');
 const defaults = require('lodash/defaults');
 
 /**
@@ -20,32 +20,39 @@ module.exports = class HealthCheck {
    */
   constructor(options) {
     this.options = defaults({}, options, HealthCheck.defaultOptions);
-    this.checkObjects = this.options.checks.map((checkOptions) => {
-      checkOptions.log = this.options.log;
+  }
 
-      if (!Object.prototype.hasOwnProperty.call(HealthCheck.checkTypeMap, checkOptions.type)) {
-        throw new TypeError(`Invalid check type: ${checkOptions.type}`);
-      }
+  async runAllHealthCheck() {
+    this.checkObjects = await Promise.all(
+      this.options.checks.map(async (checkOptions) => {
+        checkOptions.log = this.options.log;
 
-      const CheckTypeClass = HealthCheck.checkTypeMap[checkOptions.type];
-      return new CheckTypeClass(checkOptions);
-    });
+        if (!Object.prototype.hasOwnProperty.call(HealthCheck.checkTypeMap, checkOptions.type)) {
+          throw new TypeError(`Invalid check type: ${checkOptions.type}`);
+        }
+
+        const CheckTypeClass = HealthCheck.checkTypeMap[checkOptions.type];
+        const healthCheck = new CheckTypeClass(checkOptions);
+        await healthCheck.start();
+        return healthCheck;
+      }),
+    );
 
     this.log = this.options.log;
   }
 
   /**
-   * Get a status function
-   * @returns {Function} A function which returns a promise that resolves to a boolean indicating whether all the health checks are OK.
+   * Get a status
+   * @returns a promise that resolves to a boolean indicating whether all the health checks are OK.
    */
-  status() {
-    return () => {
-      const ok = this.toJSON()
-        //false will be the resolved value if any of the health checks with severity 1 are failing.
-        .filter((check) => check.severity === 1)
-        .every((check) => check.ok);
-      return Promise.resolve(ok);
-    };
+  async status() {
+    await this.runAllHealthCheck();
+    const ok = this.toJSON()
+      //false will be the resolved value if any of the health checks with severity 1 are failing.
+      .filter((check) => check.severity === 1)
+      .every((check) => check.ok);
+    console.log("check", ok);
+    return Promise.resolve(ok);
   }
 
   /**
@@ -102,7 +109,7 @@ module.exports.checkTypeMap = {
 };
 
 /**
- * HealthCheck Check class.
+ * HealthCheck Base class.
  * @access public
  */
-module.exports.Check = Check;
+module.exports.Check = Base;
