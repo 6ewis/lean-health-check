@@ -10,7 +10,7 @@ import mergeDeepLeft from 'ramda/src/mergeDeepLeft';
 /**
  * Class representing a set of health checks.
  */
-module.exports = class HealthCheck {
+export default class HealthCheck {
   /**
    * Create a health check set.
    * @param {Object} options - The health check set options.
@@ -86,13 +86,13 @@ module.exports = class HealthCheck {
     inspect.push('}');
     return inspect.join('\n');
   }
-};
+}
 
 /**
  * HealthCheck option defaults. This will be merged with user options.
  * @access private
  */
-module.exports.defaultOptions = {
+HealthCheck.defaultOptions = {
   checks: [],
   log: console,
 };
@@ -101,7 +101,7 @@ module.exports.defaultOptions = {
  * HealthCheck type to class map.
  * @access private
  */
-module.exports.checkTypeMap = {
+HealthCheck.checkTypeMap = {
   get http() {
     return require('./check/http');
   },
@@ -111,4 +111,4 @@ module.exports.checkTypeMap = {
  * HealthCheck Base class.
  * @access public
  */
-module.exports.Check = Base;
+HealthCheck.Check = Base;

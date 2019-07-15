@@ -11,7 +11,7 @@ import superagent from 'superagent';
 /**
  * Class representing a single health check that pings a URL.
  */
-module.exports = class HTTPUrlCheck extends Base {
+export default class HTTPUrlCheck extends Base {
   /**
    * Create a ping URL health check. Accepts the same options as Base, but with a few additions.
    * @param {Object} options - The health check options.
@@ -84,4 +84,4 @@ module.exports = class HTTPUrlCheck extends Base {
       throw validationResult;
     }
   }
-};
+}
